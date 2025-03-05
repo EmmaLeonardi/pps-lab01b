@@ -1,8 +1,5 @@
 package e2;
 
-import e1.ChessMovement;
-import e1.KnightMovement;
-
 import java.util.*;
 
 public class LogicsImpl implements Logics {
