@@ -1,5 +1,8 @@
 package e2;
 
+import e1.ChessMovement;
+import e1.KnightMovement;
+
 import java.util.*;
 
 public class LogicsImpl implements Logics {
@@ -8,16 +11,19 @@ public class LogicsImpl implements Logics {
 	private Pair<Integer,Integer> knight;
 	private final Random random = new Random();
 	private final int size;
+	private final ChessMovement movement;
 	 
     public LogicsImpl(int size){
     	this.size = size;
         this.pawn = this.randomEmptyPosition();
-        this.knight = this.randomEmptyPosition();	
+        this.knight = this.randomEmptyPosition();
+		this.movement=new KnightMovement(size);
     }
 
 	public LogicsImpl(int size, final Pair<Integer, Integer> pawnPosition, final Pair<Integer, Integer> knightPosition){
 		this.size = size;
-		if(isPositionLegal(pawnPosition.getX(), pawnPosition.getY())&&isPositionLegal(knightPosition.getX(), knightPosition.getY())){
+		this.movement=new KnightMovement(size);
+		if(this.movement.isPositionLegal(pawnPosition.getX(), pawnPosition.getY())&&this.movement.isPositionLegal(knightPosition.getX(), knightPosition.getY())){
 			if(!pawnPosition.equals(knightPosition)){
 				this.pawn = pawnPosition;
 				this.knight = knightPosition;
@@ -29,7 +35,7 @@ public class LogicsImpl implements Logics {
 			this.pawn = this.randomEmptyPosition();
 			this.knight=this.randomEmptyPosition();
 		}
-	}
+    }
     
 	private Pair<Integer,Integer> randomEmptyPosition(){
     	Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
@@ -39,13 +45,10 @@ public class LogicsImpl implements Logics {
     
 	@Override
 	public boolean hit(int row, int col) {
-		if (!isPositionLegal(row, col)) {
+		if (!this.movement.isPositionLegal(row, col)) {
 			throw new IndexOutOfBoundsException();
 		}
-		// Below a compact way to express allowed moves for the knight
-		int x = row-this.knight.getX();
-		int y = col-this.knight.getY();
-		if (x!=0 && y!=0 && Math.abs(x)+Math.abs(y)==3) {
+		if(this.movement.canDoMove(row, col, this.knight.getX(), this.knight.getY())){
 			this.knight = new Pair<>(row,col);
 			return this.pawn.equals(this.knight);
 		}
@@ -62,7 +65,4 @@ public class LogicsImpl implements Logics {
 		return this.pawn.equals(new Pair<>(row,col));
 	}
 
-	private boolean isPositionLegal(int x, int y){
-		return x<this.size&&y<this.size&&x>=0&&y>=0;
-	}
 }
