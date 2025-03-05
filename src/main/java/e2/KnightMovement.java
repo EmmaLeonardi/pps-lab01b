@@ -1,6 +1,4 @@
-package e1;
-
-import e2.Pair;
+package e2;
 
 public class KnightMovement implements ChessMovement{
 
@@ -20,6 +18,7 @@ public class KnightMovement implements ChessMovement{
         return false;
     }
 
+    @Override
     public boolean isPositionLegal(int x, int y){
         return x<this.size&&y<this.size&&x>=0&&y>=0;
     }
