@@ -18,7 +18,7 @@ public class LogicsImpl implements Logics {
 	public LogicsImpl(int size, final Pair<Integer, Integer> pawnPosition, final Pair<Integer, Integer> knightPosition){
 		this.size = size;
 		if(isPositionLegal(pawnPosition.getX(), pawnPosition.getY())&&isPositionLegal(knightPosition.getX(), knightPosition.getY())){
-			if(pawnPosition!=knightPosition){
+			if(!pawnPosition.equals(knightPosition)){
 				this.pawn = pawnPosition;
 				this.knight = knightPosition;
 			}else{
@@ -31,7 +31,7 @@ public class LogicsImpl implements Logics {
 		}
 	}
     
-	private final Pair<Integer,Integer> randomEmptyPosition(){
+	private Pair<Integer,Integer> randomEmptyPosition(){
     	Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
     	// the recursive call below prevents clash with an existing pawn
     	return this.pawn!=null && this.pawn.equals(pos) ? randomEmptyPosition() : pos;
